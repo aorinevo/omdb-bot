@@ -8,24 +8,36 @@ let posterCall = async (api, id) => {
   return payload
 }
 
+let movieCall = async (key, title) => {
+  const { req, res, payload } = await Wreck.get(`http://www.omdbapi.com/?apikey=${key}&t=${title}`, {json:'force'})
+  return payload
+}
+
+
 const plugin = {
   name: 'poster',
   version: '0.1.0',
   register: (server, options) => {
     server.route({
       method: ['GET', 'PUT', 'POST'],
-      path: '/api/poster/{id?}',
+      path: '/api/poster/{title?}',
       config: {
         validate: {
           params: {
-            id: Joi.string().min(9).max(10).required()
+            title: Joi.string().required()
           }
         }
       },
       handler: async (request, h) => {
+        let findMovie
+        try {
+          findMovie = await movieCall(process.env.API_KEY, request.params.title)
+        } catch (err) {
+          console.error(err)
+        }
         let findPoster
         try {
-          findPoster = await posterCall(process.env.API_KEY, request.params.id)
+          findPoster = await posterCall(process.env.API_KEY, await findMovie.imdbID)
         } catch (err) {
           console.error(err)
         }
