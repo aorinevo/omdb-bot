@@ -3,6 +3,8 @@
 const Wreck = require('@hapi/wreck')
 const Joi = require('@hapi/joi')
 
+console.log(process.env.API_KEY)
+
 let movieCall = async (key, title) => {
   const { req, res, payload } = await Wreck.get(`http://www.omdbapi.com/?apikey=${key}&t=${title}`)
   return payload
