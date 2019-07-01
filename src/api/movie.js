@@ -24,6 +24,7 @@ const plugin = {
       },
       handler: async (request, h) => {
         let findMovie
+        console.log('------> ', process.env.API_KEY)
         try {
           findMovie = await movieCall(process.env.API_KEY, request.params.title)
         } catch (err) {

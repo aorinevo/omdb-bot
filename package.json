@@ -9,7 +9,7 @@
     "lint": "npx standard",
     "lint:fix": "npx standard --fix",
     "start": "node ./src/server.js",
-    "start:dev": "nodemon",
+    "start:dev": "NODE_ENV=development nodemon",
     "test": "lab -t 100",
     "test:cov": "lab -r html -o coverage.html"
   },
