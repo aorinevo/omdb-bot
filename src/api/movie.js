@@ -3,12 +3,12 @@
 const Wreck = require('@hapi/wreck')
 const Joi = require('@hapi/joi')
 
-let movieCall = async (key, title) => {
+exports.movieCall = async (key, title) => {
   const { req, res, payload } = await Wreck.get(`http://www.omdbapi.com/?apikey=${key}&t=${title}`)
   return payload
 }
 
-const plugin = {
+exports.plugin = {
   name: 'movie',
   version: '0.1.0',
   register: (server, options) => {
@@ -35,4 +35,4 @@ const plugin = {
   }
 }
 
-module.exports = plugin
+// module.exports = plugin
