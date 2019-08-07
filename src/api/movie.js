@@ -32,7 +32,8 @@ const plugin = {
         return h.response(findMovie).type('application/json')
       }
     })
-  }
+  },
+  movieCall
 }
 
 module.exports = plugin

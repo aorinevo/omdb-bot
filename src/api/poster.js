@@ -3,6 +3,8 @@
 const Wreck = require('@hapi/wreck')
 const Joi = require('@hapi/joi')
 
+const movieCall = require('./movie').movieCall
+
 let posterCall = async (api, id) => {
   const { req, res, payload } = await Wreck.get(`http://img.omdbapi.com/?apikey=${api}&i=${id}`)
   return payload
@@ -14,18 +16,19 @@ const plugin = {
   register: (server, options) => {
     server.route({
       method: ['GET', 'PUT', 'POST'],
-      path: '/api/poster/{id?}',
+      path: '/api/poster/{title?}',
       config: {
         validate: {
           params: {
-            id: Joi.string().min(9).max(10).required()
+            title: Joi.string().required()
           }
         }
       },
       handler: async (request, h) => {
         let findPoster
         try {
-          findPoster = await posterCall(process.env.API_KEY, request.params.id)
+          const findMovie = await movieCall(process.env.API_KEY, request.params.title)
+          findPoster = await posterCall(process.env.API_KEY, findMovie.imdbID)
         } catch (err) {
           console.error(err)
         }
