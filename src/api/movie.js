@@ -1,12 +1,7 @@
 'use strict'
 
-const Wreck = require('@hapi/wreck')
 const Joi = require('@hapi/joi')
-
-let movieCall = async (key, title) => {
-  const { req, res, payload } = await Wreck.get(`http://www.omdbapi.com/?apikey=${key}&t=${title}`)
-  return payload
-}
+const movieCall = require('./movieCall');
 
 const plugin = {
   name: 'movie',
