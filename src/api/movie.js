@@ -36,3 +36,4 @@ const plugin = {
 }
 
 module.exports = plugin
+module.exports.movieCall = movieCall;
