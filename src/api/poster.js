@@ -8,6 +8,11 @@ let posterCall = async (api, id) => {
   return payload
 }
 
+let movieCall = async (key, title) => {
+  const { req, res, payload } = await Wreck.get(`http://www.omdbapi.com/?apikey=${key}&t=${title}`)
+  return payload
+}
+
 const plugin = {
   name: 'poster',
   version: '0.1.0',
@@ -18,18 +23,23 @@ const plugin = {
       config: {
         validate: {
           params: {
-            id: Joi.string().min(9).max(10).required()
+            id: Joi.string().min(1).required()
           }
         }
       },
       handler: async (request, h) => {
-        let findPoster
+        let movieData = ''
+        let posterData = ''
         try {
-          findPoster = await posterCall(process.env.API_KEY, request.params.id)
+           movieData = await movieCall(process.env.API_KEY, request.params.id)
+           let movieInformation = JSON.parse(movieData.toString())
+
+           console.log(JSON.stringify(movieInformation))
+           posterData = await posterCall(process.env.API_KEY, movieInformation.imdbID)
         } catch (err) {
           console.error(err)
         }
-        return h.response(findPoster).type('image/jpeg')
+        return h.response(posterData).type('image/jpeg')
       }
     })
   }
