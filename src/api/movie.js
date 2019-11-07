@@ -9,6 +9,7 @@ let movieCall = async (key, title) => {
 }
 
 const plugin = {
+  movieCall,
   name: 'movie',
   version: '0.1.0',
   register: (server, options) => {
