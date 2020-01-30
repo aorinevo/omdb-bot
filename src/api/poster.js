@@ -14,18 +14,25 @@ const plugin = {
   register: (server, options) => {
     server.route({
       method: ['GET', 'PUT', 'POST'],
-      path: '/api/poster/{id?}',
+      path: '/api/poster/{title?}',
       config: {
         validate: {
           params: {
-            id: Joi.string().min(9).max(10).required()
+            title: Joi.string().required()
           }
         }
       },
       handler: async (request, h) => {
         let findPoster
         try {
-          findPoster = await posterCall(process.env.API_KEY, request.params.id)
+
+          const injectOptions = {
+            method: 'GET',
+            url: `/api/movie/${request.params.title}`
+          }
+
+          const movieResponse = await server.inject(injectOptions)
+          findPoster = await posterCall(process.env.API_KEY, JSON.parse(movieResponse.payload).imdbID)
         } catch (err) {
           console.error(err)
         }
